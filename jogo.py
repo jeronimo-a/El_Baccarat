@@ -6,7 +6,7 @@ Jerônimo Afrange e Lucas Quadros
 Módulo que contém o loop principal de jogo
 '''
 
-# --- CONSTRÓI UM BARALHO COMUM DE 52 CARTAS QUE NÃO SERÁ ALTERADO --- --- ---
+# --- CONSTRÓI UM BARALHO COMUM DE 52 CARTAS PARA REFERÊNCIA --- --- ---
 
 # carta: número
 # não há necessidade de especificar o naipe
@@ -20,6 +20,31 @@ for _ in range(4):
 	for carta in range(1, 14):
 		BARALHO.append(carta)
 
+# torna o objeto inalterável
 BARALHO = tuple(BARALHO)
 
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+# --- FUNÇÕES ÚTEIS --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+def soma_cartas(cartas):
+	''' recebe uma lista de cartas e retorna o valor
+		da soma a partir das regras do Bacará '''
+
+	# base da soma
+	soma = 0
+
+	# loop de soma
+	for carta in cartas:
+
+		# ignora as cartas acima de nove
+		if carta > 9: continue
+
+		# soma o valor das demais cartas
+		soma += carta
+
+	# descarte das dezenas
+	soma %= 10
+
+# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
