@@ -1,0 +1,68 @@
+Fluxo do jogo de Bacará
+
+1: Apostas: jogador vs mesa (1 jogador, um ou mais apostadores);
+
+2: A mesa embaralha as cartas (1, 6 ou 8 baralhos);
+
+3: Distribui duas pro jogador, e duas para a própria mesa;
+
+4:
+	Se a soma das cartas da mesa e do jogador forem iguais a 8 ou 9:
+		empate
+		pagamento das apostas
+		fim de jogo
+
+	Se a soma das cartas do jogador for igual a 8 ou 9:
+		jogador ganha
+		pagamento das apostas
+		fim de jogo
+
+	Se a soma das cartas da mesa for igual a 8 ou 9:
+		mesa ganha
+		pagamento das apostas
+		fim de jogo
+
+	Se nenhuma condição acima for verdade:
+		passo 5
+
+5: 
+	Se a soma da mão do jogador não for 6 ou 7:
+		A mesa da mais uma carta para o jogador
+
+		Se a nova soma for 8 ou 9:
+			jogador ganha
+			pagamento das apostas
+			fim de jogo
+
+		Se não for igual a 8 ou 9:
+			passo 6
+
+	Se a soma da mão do jogador for igual a 6 ou 7:
+		passo 6
+
+6:
+	Se a soma da mão do banco não for igual 6 ou 7:
+		A mesa da mais uma carta para o banco
+
+		Se a nova soma for 8 ou 9:
+			mesa ganha
+			pagamento das apostas
+			fim de jogo
+
+		Se não for igual a 8 ou 9:
+			passo 7
+
+	Se a soma da mão do banco for igual a 6 ou 7
+
+		Se a soma da mão do jogador também for igual a 6 ou 7:
+			empate
+			pagamento das apostas
+			fim de jogo
+
+		Se a soma do jogador não for 6 ou 7:
+			passo 7
+
+7:
+	Se a soma das cartas de jogador ou da mesa for menor que 6:
+		passo 5
+	
