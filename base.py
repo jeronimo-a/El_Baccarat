@@ -6,9 +6,9 @@ Jerônimo Afrange e Lucas Quadros
 Módulo que contém as funções base do jogo
 '''
 
-def definir_baralho():
-	''' constrói um baralho de 52 cartas sem naipe retorna
-		uma listade números que representam as cartas
+def construir_baralhos(quantidade):
+	'''	constrói "x" baralhos completos de cartas sem naipe
+		retorna uma lista de números que representam as cartas
 
 		1: ás, 2: dois, 11: J, 12: Q, 13: K '''
 
@@ -22,13 +22,13 @@ def definir_baralho():
 		for carta in range(1, 14):
 			baralho.append(carta)
 
-	# retorna o objeto
-	return baralho
+	# retorna o objeto imutável multiplicado
+	return tuple(baralho * quantidade)
 
 
 def soma_cartas(cartas):
-	''' recebe uma lista de cartas e retorna o valor da soma
-		a partir das regras do Bacará
+	''' recebe uma lista de cartas e retorna o valor da
+		soma a partir das regras do Bacará
 
 		ás: 1, dois: 2, ..., dez: 0, J: 0, Q: 0, K: 0 '''
 
@@ -49,3 +49,4 @@ def soma_cartas(cartas):
 
 	# retorna a soma
 	return soma
+
