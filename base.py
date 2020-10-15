@@ -7,20 +7,23 @@ Módulo que contém as funções base do jogo
 '''
 
 def construir_baralhos(quantidade):
-	'''	constrói "x" baralhos completos de cartas sem naipe
-		retorna uma lista de números que representam as cartas
-
-		1: ás, 2: dois, 11: J, 12: Q, 13: K '''
+	'''	constrói "x" baralhos completos de; retorna uma
+		tupla de tuplas que representam as cartas
+		
+		carta: (naipe, número)
+		
+		naipes - 1: ouros, 2: espadas, 3: copas, 4: paus
+		números - 1: ás, 2: dois, 11: J, 12: Q, 13: K '''
 
 	# objeto de retorno
 	baralho = list()
 
 	# cria quatro grupos de cartas (um para cada naipe):
-	for nipe in range(1,5):
+	for naipe in range(1,5):
 		
 		# loop de criação das cartas individuais
 		for numero in range(1, 14):
-			carta= (nipe, numero)
+			carta = (naipe, numero)
 			baralho.append(carta)
 
 	# retorna o objeto imutável multiplicado
@@ -51,6 +54,4 @@ def soma_cartas(cartas):
 
 	# retorna a soma
 	return soma
-
-
-print(construir_baralhos(1))
+	
