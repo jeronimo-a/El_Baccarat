@@ -1,6 +1,6 @@
 Fluxo do jogo de Bacará
 
-1: Apostas: jogador vs mesa (1 jogador, um ou mais apostadores);
+1: Apostas: jogador vs mesa vs empate (1 jogador, um ou mais apostadores);
 
 2: A mesa embaralha as cartas (1, 6 ou 8 baralhos);
 
@@ -8,9 +8,16 @@ Fluxo do jogo de Bacará
 
 4:
 	Se a soma das cartas da mesa e do jogador forem iguais a 8 ou 9:
-		empate
-		pagamento das apostas
-		fim de jogo
+
+		Se a soma dos dois forem iguais:
+			empate
+			pagamento das apostas
+			fim de jogo
+
+		Se não:
+			quem tem a soma 9 ganha
+			pagamento das apostas
+			fim de jogo
 
 	Se a soma das cartas do jogador for igual a 8 ou 9:
 		jogador ganha
@@ -65,4 +72,20 @@ Fluxo do jogo de Bacará
 7:
 	Se a soma das cartas de jogador ou da mesa for menor que 6:
 		passo 5
+
+	Se a soma de ambos forem iguais:
+		empate
+		pagamento das apostas
+		fim de jogo
+
+	Se não:
+		ganha quem tiver a soma igual a 7
+		pagamento das apostas
+		fim de jogo
+
+
+
+
+
+
 	
