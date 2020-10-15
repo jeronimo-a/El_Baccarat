@@ -15,10 +15,31 @@ JOGO = True
 # loop principal do jogo, quando acaba o jogo finaliza
 while JOGO:
 
-	# criação do baralho imutável (referência somente)
-	BARALHO = construir_baralhos(1)	# por enquanto só 1
+	# loop que pergunta com quantos baralhos jogar
+	while True:
 
-	#definir numero de jogadores
+		# pergunta
+		numero_baralhos = input('Com quantos baralhos gostaria de jogar? (1, 6 ou 8)')
+
+		# verifica se o input é um número
+		try: numero_baralhos = int(numero_baralhos)
+
+		except:
+			print('Não entendi.')
+			continue
+
+		# verifica se o número é 1, 6 ou 8
+		if numero_baralhos not in [1, 6, 8]:
+			print('Não jogamos com essa quantidade de baralhos.')
+			continue
+		
+		break
+
+
+	# criação do baralho imutável (referência somente)
+	BARALHO = construir_baralhos(numero_baralhos)	# por enquanto só 1
+
+	# pergunta o número de jogadores
 	while True:
 		jogadores= input("quantos jogadores?")
 		try: 
@@ -30,7 +51,7 @@ while JOGO:
 
 	
 	#Nomeação dos jogadores e atribuição de fichas 
-	JOGADORES= dict()
+	JOGADORES = dict()
 	for i in range(jogadores):
 		nome= input("Qual o nome do jogador %d ?" % i)
 		JOGADORES[nome]=1000
