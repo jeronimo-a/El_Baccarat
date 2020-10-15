@@ -32,31 +32,50 @@ while JOGO:
 		if numero_baralhos not in [1, 6, 8]:
 			print('Não jogamos com essa quantidade de baralhos.')
 			continue
-		
+
 		break
 
 
 	# criação do baralho imutável (referência somente)
-	BARALHO = construir_baralhos(numero_baralhos)	# por enquanto só 1
+	BARALHO = construir_baralhos(numero_baralhos)
 
-	# pergunta o número de jogadores
+
+	# loop que pergunta o número de jogadores
 	while True:
-		jogadores= input("quantos jogadores?")
+
+		# input do número de jogadores
+		numero_jogadores = input('Quantas pessoas vão apostar?')
+
+		# verifica se o valor é um número
 		try: 
-			jogadores= int(jogadores)
+			numero_jogadores = int(numero_jogadores)
 			break
+
 		except:
-			print("Número de jogadores inváilido" )
+			print('Não entendi.')
 			continue 
 
-	
-	#Nomeação dos jogadores e atribuição de fichas 
-	JOGADORES = dict()
-	for i in range(jogadores):
-		nome= input("Qual o nome do jogador %d ?" % i)
-		JOGADORES[nome]=1000
+
+	# nomeação dos jogadores e atribuição de fichas 
+	FICHAS = dict()	# FICHAS[nome_jogador] = fundos_jogador
 
 
+	# pergunta o nome dos jogadores
+	for _ in range(1, numero_jogadores + 1):
+
+		# loop de verificação de validade
+		while True:
+
+			# input do nome
+			nome = input('Qual o nome do jogador %d?' % i, end=' ')
+
+			# verifica se é uma string vazia
+			if nome == '':
+				print('Você tem que chamá-lo de algo.')
+				continue
+
+			# designa as fichas iniciais
+			FICHAS[nome] = 1000
 
 
 	# bandeira de rodada, caso False a rodada termina
@@ -64,47 +83,66 @@ while JOGO:
 
 	# loop de rodada, quando acaba a rodada finaliza
 	while RODADA:
-		APOSTAS= dict()	
-		for nome in JOGADORES.keys():
-			
-		# --- --- PASSO 1 --- --- --- --- --- --- --- --- ---
+
+		# --- --- PASSO 1: APOSTAS --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+		# dicionario de apostas APOSTA[nome_jogador] = (quanto_aposta, qual_aposta)
+		APOSTAS = dict()	
+
+		# loop de apostas por jogador
+		for nome in FICHAS.keys():
+
+			# loop de verificação de qual é a aposta
 			while True:
 
-				aposta_qte= input("Quanto quer apostar?")
-				try:
-					aposta_qte=int(aposta_qte)
-					if aposta_qte > JOGADORES[nome]:
-						print("aposta maior do que o número de fichas")
+				# input de qual aposta
+				qual_aposta = input('Qual a sua aposta? (banco/jogador/empate)')
 
-						continue
-					break
-				except:
-
-					print("Não entendi")
-					continue	
-					
-			while True:
-				aposta_quem= input("Apostar na Banco ou no Jogador?")
-				if aposta_quem not in ["Banco", "Jogador", "Empate"]:
-					print("Não entendi")
+				# verifica validade da entrada
+				if qual_aposta not in ['Banco', 'Jogador', 'Empate']:
+					print('Não entendi.')
 					continue
+
+				# caso nada de errado ocorra, sai do loop
 				break
-
-			APOSTAS[nome]= (aposta_qte, aposta_quem)
 			
+			# loop de verificação do quanto é a aposta
+			while True:
 
+				# input do valor da aposta
+				quanto_aposta = input('%s, quanto você quer apostar?' % nome)
 
+				# verifica se é um número
+				try: quanto_aposta = int(quanto_aposta)
+				except:
+					print('Não entendi.')
+					continue
 
+				# verifica suficiência de fundos
+				if quanto_aposta > FICHAS[nome]:
+					print('Você não tem tudo isso.')
+					continue
 
+				# gracinha
+				if quanto_aposta == 0: print('Bunda mole.')
 
+				# caso nada de errado ocorra, sai do loop
+				break
+			
+			# registra a aposta
+			APOSTAS[nome]= (qual_aposta, quanto_aposta)
+			
+		# --- --- PASSO 2: EMBARALHAR --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-
-
-		# *** definir apostas aqui ***
-
-		# --- --- PASSO 2 --- --- --- --- --- --- --- --- ---
-		# define o bolo de jogo a partir do baralho de
-		# referência e embaralha as cartas
+		# define o bolo de jogo a partir do baralho de referência
 		bolo = list(BARALHO)
+
+		# embaralha o bolo
 		embaralhar(bolo)
+
+
+
+
+
+
 
