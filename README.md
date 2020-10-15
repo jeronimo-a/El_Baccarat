@@ -1,2 +1,2 @@
-# El-Bacarat
-Exercício problema Des.Soft
+# El-Bacará
+Exercício problema Design de Software
