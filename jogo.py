@@ -6,7 +6,7 @@ Jerônimo Afrange e Lucas Quadros
 Módulo que contém o loop principal de jogo
 '''
 
-# --- CONSTRÓI UM BARALHO COMUM DE 54 CARTAS QUE NÃO SERÁ ALTERADO --- --- ---
+# --- CONSTRÓI UM BARALHO COMUM DE 52 CARTAS QUE NÃO SERÁ ALTERADO --- --- ---
 
 # carta: (naipe, número)
 BARALHO = list()
