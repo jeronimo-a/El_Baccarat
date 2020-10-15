@@ -16,10 +16,11 @@ def construir_baralhos(quantidade):
 	baralho = list()
 
 	# cria quatro grupos de cartas (um para cada naipe):
-	for _ in range(4):
+	for nipe in range(1,5):
 		
 		# loop de criação das cartas individuais
-		for carta in range(1, 14):
+		for numero in range(1, 14):
+			carta= (nipe, numero)
 			baralho.append(carta)
 
 	# retorna o objeto imutável multiplicado
@@ -42,7 +43,8 @@ def soma_cartas(cartas):
 		if carta > 9: continue
 
 		# soma o valor das demais cartas
-		soma += carta
+		soma += carta[1]
+	
 
 	# descarte das dezenas
 	soma %= 10
@@ -50,3 +52,5 @@ def soma_cartas(cartas):
 	# retorna a soma
 	return soma
 
+
+print(construir_baralhos(1))
