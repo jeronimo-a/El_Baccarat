@@ -6,7 +6,7 @@ Jerônimo Afrange e Lucas Quadros
 Módulo que contém as funções base do jogo
 '''
 
-def construir_baralhos(quantidade):
+def baralhos(quantidade):
 	'''	constrói "x" baralhos completos de; retorna uma
 		tupla de tuplas que representam as cartas
 		
@@ -54,4 +54,85 @@ def soma_cartas(cartas):
 
 	# retorna a soma
 	return soma
+
+
+def solicitar_entrada(saidas, tipo_esperado, whitelist=[], blacklist=[], variavel_pergunta=None, marcador_variavel=None, minimo=None, maximo=None):
+	''' pede entradas do(s) jogador(es) e verifica a validade da entrada
+		levando em conta tipo de dado esperado e valores esperados
+
+		retorna a resposta processada '''
+
+	# clona o dicionario afim de não alterá-lo fora do escopo da função
+	saidas = dict(saidas)
 	
+	# verifica se a pergunta contém uma variável, caso sim, a insere na pergunta
+	if variavel_pergunta != None:
+
+		# define a lista dos caracteres da pergunta
+		lista_char = list(saidas['pergunta'])
+
+		# define a posicao do marcador de posição da variável
+		indice_variavel = lista_char.index(marcador_variavel)
+
+		# substitui o marcador pela variável e redefine a variável original
+		lista_char[indice_variavel] = variavel_pergunta
+		saidas['pergunta'] = str().join(lista_char)
+
+	# loop de verificação
+	while True:
+		
+		# solicita a entrada
+		resposta = input(saidas['pergunta'])
+
+		# caso o tipo esperado for um número inteiro
+		if tipo_esperado == 'int':
+
+			# verifica se a entrada é um número
+			try: resposta = float(resposta)
+
+			# caso não for, reinicia o loop
+			except:
+				print(saidas['tipo errado'])
+				continue
+
+			# verifica se o número é inteiro, se não for, reinicia o loop
+			if resposta != int(resposta):
+				print(saidas['tipo errado 2'])
+				continue
+
+			# verifica se o número tem que estar dentro de um intervalo
+			if minimo != None and maximo != None:
+
+				# se maior que o máximo, reinicia o loop
+				if resposta > maximo:
+					print(saidas['maior que o maximo'])
+					continue
+
+				# se menor que o mínimo, reinicia o loop
+				if resposta < minimo:
+					print(saidas['menor que o minimo'])
+					continue
+
+			# transforma a entrada em um int, finalmente
+			resposta = int(resposta)
+
+		# verifica se a resposta está entre as esperadas
+		if resposta not in whitelist and len(whitelist) > 0:
+			print(saidas['fora da whitelist'])
+			continue
+
+		# verifica se a resposta está entre as bloqueadas
+		if resposta in blacklist:
+			print(saidas['dentro da blacklist'])
+			continue
+
+		# quebra o loop de verificação
+		break
+
+	# retorna a resposta processada
+	return resposta
+
+
+
+
+
