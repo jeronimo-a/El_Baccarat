@@ -96,6 +96,25 @@ while JOGO:
 		embaralhar(BOLO)
 
 
+##### -------  --------- Passo 3 ------- ####################################################3
+
+		mao_jog=[]
+		mao_banco=[]
+		#i= contador fixo da ordem do baralho
+		i=0
+		while True:
+			mao_jog.append(BOLO[i])
+			i+=1
+			mao_jog.append(BOLO[i])
+
+			i+=1
+			mao_banco.append(BOLO[i])
+			i+=1
+			mao_banco.append(BOLO[i])
+			i+=1
+			break
+		print(mao_jog, mao_banco)
+
 
 
 
