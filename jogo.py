@@ -95,25 +95,17 @@ while JOGO:
 		# embaralha o bolo
 		embaralhar(BOLO)
 
+		# --- --- PASSO 3: DISTRIBUIR --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-##### -------  --------- Passo 3 ------- ####################################################3
+		MAO_JOGADOR = []
+		MAO_BANCO = []
 
-		mao_jog=[]
-		mao_banco=[]
-		#i= contador fixo da ordem do baralho
-		i=0
-		while True:
-			mao_jog.append(BOLO[i])
-			i+=1
-			mao_jog.append(BOLO[i])
+		MAO_JOGADOR.append(BOLO.pop())
+		MAO_BANCO.append(BOLO.pop())
+		MAO_JOGADOR.append(BOLO.pop())
+		MAO_BANCO.append(BOLO.pop())
 
-			i+=1
-			mao_banco.append(BOLO[i])
-			i+=1
-			mao_banco.append(BOLO[i])
-			i+=1
-			break
-		print(mao_jog, mao_banco)
+		
 
 
 
