@@ -63,7 +63,7 @@ while PROGRAMA:
 			# fala de início de rodada
 			print(falas['bandeiras']['inicio rodada'])
 
-			# --- --- PASSO 1: APOSTAS --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+			# --- --- PASSO 1: APOSTAS --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 			# dicionario de apostas
 			APOSTAS = dict()	# APOSTA[nome_jogador] = (quanto_aposta, qual_aposta)
@@ -93,7 +93,7 @@ while PROGRAMA:
 				APOSTAS[nome]= (qual_aposta, quanto_aposta)
 				
 
-			# --- --- PASSO 2: EMBARALHAR --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+			# --- --- PASSO 2: EMBARALHAR --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 			# define o bolo de jogo a partir do baralho de referência
 			BOLO = list(BARALHO)
@@ -101,7 +101,7 @@ while PROGRAMA:
 			# embaralha o bolo
 			embaralhar(BOLO)
 
-			# --- --- PASSO 3: DISTRIBUIR --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+			# --- --- PASSO 3: DISTRIBUIR --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 			MAO_JOGADOR = []
 			MAO_BANCO = []
@@ -111,9 +111,79 @@ while PROGRAMA:
 			MAO_JOGADOR.append(BOLO.pop())
 			MAO_BANCO.append(BOLO.pop())
 
+			# --- --- PASSO 4, 5, 6 e 7: VERIFICA GANHADORES E DISTRIBUI CARTAS RECORRENTEMENTE --- --- --- --- --- --- --- --- --- --- --- ---
+
+			soma_jogador = soma_cartas(MAO_JOGADOR)
+			soma_banco = soma_cartas(MAO_BANCO)
+
+			print('MÃO DO JOGADOR:', str(MAO_JOGADOR))
+			print('SOMA JOGADOR: %d' % soma_jogador)
+
+			print('MÃO DO BANCO:', str(MAO_BANCO))
+			print('SOMA BANCO: %d' % soma_banco)
+
+			jogador_ganhou = soma_jogador in [8, 9]
+			banco_ganhou = soma_banco in [8, 9]
+
+			sem_ganhador = not (jogador_ganhou or banco_ganhou)
+
+			jogador_finalizado = soma_jogador in [6, 7]
+			banco_finalizado = soma_banco in [6, 7]
+
+			todos_finalizados = jogador_finalizado and banco_finalizado
 
 
+			# loop de distribuição das cartas extras
+			while sem_ganhador and not todos_finalizados:
 
+				jogador_recebe = (banco_finalizado or len(MAO_JOGADOR) == len(MAO_BANCO)) and not jogador_finalizado
+				banco_recebe = len(MAO_JOGADOR) > len(MAO_BANCO) and not banco_finalizado
+
+				if jogador_recebe:
+
+					MAO_JOGADOR.append(BOLO.pop())
+					soma_jogador = soma_cartas(MAO_JOGADOR)
+
+					print('MÃO DO JOGADOR:', str(MAO_JOGADOR))
+					print('SOMA JOGADOR: %d' % soma_jogador)
+
+					jogador_ganhou = soma_jogador in [8, 9]
+					jogador_finalizado = soma_jogador in [6, 7]
+
+
+				if banco_recebe:
+
+					MAO_BANCO.append(BOLO.pop())
+					soma_banco = soma_cartas(MAO_BANCO)
+
+					print('MÃO DO BANCO:', str(MAO_BANCO))
+					print('SOMA BANCO: %d' % soma_banco)
+
+					banco_ganhou = soma_banco in [8, 9]
+					banco_finalizado = soma_banco in [6, 7]
+
+				sem_ganhador = not (jogador_ganhou or banco_ganhou)
+				todos_finalizados = jogador_finalizado and banco_finalizado
+
+
+			if todos_finalizados:
+
+				if soma_jogador == soma_banco: RESULTADO = 'E'
+				elif soma_jogador > soma_banco: RESULTADO = 'J'
+				elif soma_banco > soma_jogador: RESULTADO = 'B'
+
+			if not sem_ganhador:
+
+				if jogador_ganhou and banco_ganhou:
+
+					if soma_jogador == soma_banco: RESULTADO = 'E'
+					elif soma_jogador > soma_banco: RESULTADO = 'J'
+					elif soma_banco > soma_jogador: RESULTADO = 'B'
+
+				elif jogador_ganhou: RESULTADO = 'J'
+				elif banco_ganhou: RESULTADO = 'B'
+
+			print(RESULTADO)
 
 
 
