@@ -113,75 +113,74 @@ while PROGRAMA:
 
 			# --- --- PASSO 4, 5, 6 e 7: VERIFICA GANHADORES E DISTRIBUI CARTAS RECORRENTEMENTE --- --- --- --- --- --- --- --- --- --- --- ---
 
-			soma_jogador = soma_cartas(MAO_JOGADOR)
-			soma_banco = soma_cartas(MAO_BANCO)
+			# calcula as somas da mão do jogador e do banco
+			SOMA_JOGADOR = soma_cartas(MAO_JOGADOR)
+			SOMA_BANCO = soma_cartas(MAO_BANCO)
 
 			print('MÃO DO JOGADOR:', str(MAO_JOGADOR))
-			print('SOMA JOGADOR: %d' % soma_jogador)
+			print('SOMA JOGADOR: %d' % SOMA_JOGADOR)
 
 			print('MÃO DO BANCO:', str(MAO_BANCO))
-			print('SOMA BANCO: %d' % soma_banco)
+			print('SOMA BANCO: %d' % SOMA_BANCO)
 
-			jogador_ganhou = soma_jogador in [8, 9]
-			banco_ganhou = soma_banco in [8, 9]
+			# variáveis booleanas, determinam se algum dos dois finalizou, ou seja, somou 8 ou 9
+			jogador_finalizou = SOMA_JOGADOR in [8,9]
+			banco_finalizou = SOMA_BANCO in [8,9]
 
-			sem_ganhador = not (jogador_ganhou or banco_ganhou)
+			# bandeiras do loop de distribuicao de cartas
+			sem_finalizadores = not (jogador_finalizou or banco_finalizou)	# True para ninguém com soma 8 ou 9
+			alguem_recebendo = not SOMA_JOGADOR in [6,7] or not SOMA_BANCO in [6,7]	# False para ambos com soma 6 ou 7
 
-			jogador_finalizado = soma_jogador in [6, 7]
-			banco_finalizado = soma_banco in [6, 7]
+			# loop de distribuição das cartas extras, verificando finalizações
+			# seja por ambos entalados em 6 ou 7, seja por um dos dois em 8 ou 9
+			while sem_finalizadores and alguem_recebendo:
 
-			todos_finalizados = jogador_finalizado and banco_finalizado
 
+				# dá a carta extra ao jogador, caso não tenha somado 6 ou 7
+				if SOMA_JOGADOR not in [6,7]:
 
-			# loop de distribuição das cartas extras
-			while sem_ganhador and not todos_finalizados:
-
-				jogador_recebe = (banco_finalizado or len(MAO_JOGADOR) == len(MAO_BANCO)) and not jogador_finalizado
-				banco_recebe = len(MAO_JOGADOR) > len(MAO_BANCO) and not banco_finalizado
-
-				if jogador_recebe:
-
+					# retira uma carta do bolo e a adiciona à mão do jogador
 					MAO_JOGADOR.append(BOLO.pop())
-					soma_jogador = soma_cartas(MAO_JOGADOR)
+					SOMA_JOGADOR = soma_cartas(MAO_JOGADOR)
 
 					print('MÃO DO JOGADOR:', str(MAO_JOGADOR))
-					print('SOMA JOGADOR: %d' % soma_jogador)
+					print('SOMA JOGADOR: %d' % SOMA_JOGADOR)
 
-					jogador_ganhou = soma_jogador in [8, 9]
-					jogador_finalizado = soma_jogador in [6, 7]
+					# variável booleana, determina se o jogador somou 8 ou 9
+					jogador_finalizou = SOMA_JOGADOR in [8,9]
 
 
-				if banco_recebe:
+				# dá a carta extra ao banco, caso não tenha somado 6 ou 7, e o jogador não tenha finalizado
+				if SOMA_BANCO not in [6,7] and not jogador_finalizou:
 
+					# retira uma carta do bolo e a adiciona à mão do banco
 					MAO_BANCO.append(BOLO.pop())
-					soma_banco = soma_cartas(MAO_BANCO)
+					SOMA_BANCO = soma_cartas(MAO_BANCO)
 
 					print('MÃO DO BANCO:', str(MAO_BANCO))
-					print('SOMA BANCO: %d' % soma_banco)
+					print('SOMA BANCO: %d' % SOMA_BANCO)
 
-					banco_ganhou = soma_banco in [8, 9]
-					banco_finalizado = soma_banco in [6, 7]
+					# variável booleana, determina se o banco somou 8 ou 9 
+					banco_finalizou = SOMA_BANCO in [8,9]
 
-				sem_ganhador = not (jogador_ganhou or banco_ganhou)
-				todos_finalizados = jogador_finalizado and banco_finalizado
+				# atualiza as bandeiras do loop conforme os novos valores
+				sem_finalizadores = not (jogador_finalizou or banco_finalizou)
+				alguem_recebendo = not SOMA_JOGADOR in [6,7] or not SOMA_BANCO in [6,7]
 
+			# se ambos ficaram presos em 6 ou 7, ou se ambos somaram 8 ou 9
+			if not alguem_recebendo or (jogador_finalizou and banco_finalizou):
 
-			if todos_finalizados:
+				# verifica quem tem a soma maior
+				if SOMA_JOGADOR == SOMA_BANCO: RESULTADO = 'E'
+				elif SOMA_JOGADOR > SOMA_BANCO: RESULTADO = 'J'
+				elif SOMA_BANCO > SOMA_JOGADOR: RESULTADO = 'B'
 
-				if soma_jogador == soma_banco: RESULTADO = 'E'
-				elif soma_jogador > soma_banco: RESULTADO = 'J'
-				elif soma_banco > soma_jogador: RESULTADO = 'B'
+			# se somente um dos dois finalizou
+			elif not sem_finalizadores:
 
-			if not sem_ganhador:
-
-				if jogador_ganhou and banco_ganhou:
-
-					if soma_jogador == soma_banco: RESULTADO = 'E'
-					elif soma_jogador > soma_banco: RESULTADO = 'J'
-					elif soma_banco > soma_jogador: RESULTADO = 'B'
-
-				elif jogador_ganhou: RESULTADO = 'J'
-				elif banco_ganhou: RESULTADO = 'B'
+				# verifica quem finalizou
+				if jogador_finalizou: RESULTADO = 'J'
+				elif banco_finalizou: RESULTADO = 'B'
 
 			print(RESULTADO)
 
