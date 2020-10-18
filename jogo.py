@@ -9,21 +9,7 @@ Módulo que contém o loop principal de jogo
 from base import *	# importa todas as funções base
 from falas import falas	# importa as falas do jogo
 from random import shuffle as embaralhar	# importa a função de embaralhamento
-
-
-TAXAS = {
-	'E': 8,
-	'J': 1,
-	'B': 0.95
-}
-
-COMISSAO = {
-	1: {'E': 0.1575, 'B': 0.0101, 'J': 0.0129},
-	6: {'E': 0.1444, 'B': 0.0106, 'J': 0.0124},
-	8: {'E': 0.1436, 'B': 0.0106, 'J': 0.0124}
-}
-
-
+from configuracoes import * 	# importa as configurações de jogo
 
 # bandeira de programa, caso False, o programa finaliza
 PROGRAMA = True
@@ -37,7 +23,7 @@ while PROGRAMA:
 	# pergunta com quantos baralhos jogar, verificando erros
 	numero_baralhos = solicitar_entrada(
 		falas['numero baralhos'],
-		'int', whitelist=[1,6,8]
+		'int', whitelist=POSSIBILIDADES_DE_BARALHOS
 		)
 
 	# criação do baralho imutável (referência somente)
@@ -158,13 +144,12 @@ while PROGRAMA:
 		jogador_finalizou = SOMA_JOGADOR in [8,9]
 		banco_finalizou = SOMA_BANCO in [8,9]
 
-		# bandeiras do loop de distribuicao de cartas
+		# bandeiras da condicao de distribuicao da terceira carta
 		sem_finalizadores = not (jogador_finalizou or banco_finalizou)	# True para ninguém com soma 8 ou 9
 		alguem_recebendo = not SOMA_JOGADOR in [6,7] or not SOMA_BANCO in [6,7]	# False para ambos com soma 6 ou 7
 
-		# loop de distribuição das cartas extras, verificando finalizações
-		# seja por ambos entalados em 6 ou 7, seja por um dos dois em 8 ou 9
-		while sem_finalizadores and alguem_recebendo:
+		# condicao de distribuicao da terceira carta
+		if sem_finalizadores and alguem_recebendo:
 
 
 			# dá a carta extra ao jogador, caso não tenha somado 6 ou 7
@@ -192,9 +177,9 @@ while PROGRAMA:
 				# variável booleana, determina se o banco somou 8 ou 9 
 				banco_finalizou = SOMA_BANCO in [8,9]
 
-			# atualiza as bandeiras do loop conforme os novos valores
-			sem_finalizadores = not (jogador_finalizou or banco_finalizou)
-			alguem_recebendo = not SOMA_JOGADOR in [6,7] or not SOMA_BANCO in [6,7]
+		# atualiza as bandeiras da condição conforme os novos valores
+		sem_finalizadores = not (jogador_finalizou or banco_finalizou)
+		alguem_recebendo = not SOMA_JOGADOR in [6,7] or not SOMA_BANCO in [6,7]
 
 		# se ambos ficaram presos em 6 ou 7, ou se ambos somaram 8 ou 9
 		if not alguem_recebendo or (jogador_finalizou and banco_finalizou):
@@ -213,27 +198,38 @@ while PROGRAMA:
 
 		# --- --- --- PAGAMENTO DAS APOSTAS --- --- --- --- --- --- ---
 
+		# loop de pagamento, vai de aposta em aposta
 		for nome in APOSTAS.keys():
 
+			# variáveis usadas com frequência
 			qual_aposta = APOSTAS[nome][0]
 			quanto_aposta = APOSTAS[nome][1]
-			acertou = qual_aposta == RESULTADO
 
-			if not acertou:
+			# se errou a aposta
+			if not qual_aposta == RESULTADO:
 
-				if FICHAS[nome] == quanto_aposta:
-					print(nome + falas['pagamento']['perdeu tudo'])
-				else:
-					print(nome + falas['pagamento']['perdeu'], str(quanto_aposta), end=' fichas.\n')
+				# caso acabou de perder tudo, imprimir fala apropriada
+				if FICHAS[nome] == quanto_aposta: print(nome + falas['pagamento']['perdeu tudo'])
 
+				# caso contrário
+				else: print(nome + falas['pagamento']['perdeu'], str(quanto_aposta), end=' fichas.\n')
+
+				# subtrai a perda do total de fichas
 				FICHAS[nome] -= quanto_aposta
+
+				# quebra o loop
 				continue
 
+			# calcula o ganho, levando em conta a comissão do cassino
 			ganho = int(TAXAS[qual_aposta] * quanto_aposta * (1 - COMISSAO[numero_baralhos][qual_aposta]))
 
+			# verifica se ganhou com empate, nesse caso, imprime fala apropriada
 			if RESULTADO == 'E': print(nome + falas['pagamento']['ganhou E'], str(ganho), end=' fichas, com a nossa comissão já inclusa.\n')
+
+			# caso contrário
 			else: print(nome + falas['pagamento']['ganhou'], str(ganho), end=' fichas, considerando a nossa comissão.\n')
 
+			# adiciona o ganho às fichas
 			FICHAS[nome] += ganho
 
 

@@ -1,7 +1,7 @@
 '''
 EP - Design de Software
 Jerônimo Afrange e Lucas Quadros
-15/10/2020
+16/10/2020
 
 Módulo que contém as falas do jogo
 '''
