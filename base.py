@@ -127,10 +127,75 @@ def solicitar_entrada(saidas, tipo_esperado, whitelist=[], blacklist=[], variave
 			continue
 
 		# quebra o loop de verificação
+		print()
 		break
 
 	# retorna a resposta processada
 	return resposta
+
+
+def mostrar_maos(mao_jogador, mao_banco, soma_jogador, soma_banco):
+	''' imprime a mão do banco e do jogador na
+		tela de forma organizada '''
+
+	print('MÃO DO JOGADOR:\t\tMÃO DO BANCO:')
+
+	i = 0
+	while True:
+
+		jogador = True
+		banco = True
+
+		try: print(le_carta(mao_jogador[i]), end='\t\t')
+		except:
+			print(end='\t\t\t')
+			jogador = False
+
+		try: print(le_carta(mao_banco[i]))
+		except:
+			print()
+			banco = False
+
+		if not (banco or jogador): break
+
+		i += 1
+
+	print('Somando %d\t\tSomando %d' % (soma_jogador, soma_banco), end='\n\n')
+
+
+
+def le_carta(carta):
+	''' retorna uma string legível a partir de
+		uma tupla que representa uma carta '''
+
+	naipe = {
+		1: 'ouros',
+		2: 'espadas',
+		3: 'copas',
+		4: 'paus'
+	}
+
+	numero = {
+		1: 'A',
+		2: '2',
+		3: '3',
+		4: '4',
+		5: '5',
+		6: '6',
+		7: '7',
+		8: '8',
+		9: '9',
+		10: '10',
+		11: 'J',
+		12: 'Q',
+		13: 'K'
+	}
+
+	return numero[carta[1]].title() + ' de ' + naipe[carta[0]]
+
+
+
+
 
 
 
