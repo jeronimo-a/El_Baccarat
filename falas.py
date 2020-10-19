@@ -16,8 +16,10 @@ falas['numero baralhos'] = {
 }
 
 falas['numero jogadores'] = {
-	'pergunta': 'Quantas pessoas vão apostar? ',
+	'pergunta': 'Quantas pessoas vão apostar? No máximo ;. ',
 	'tipo errado': 'Preciso de um número.',
+	'maior que o maximo': 'Jogadores demais.',
+	'menor que o minimo': 'Impossível.',
 	'tipo errado 2': 'Crianças não apostam. Um número inteiro, por favor.'
 }
 
@@ -41,9 +43,11 @@ falas['quanto aposta'] = {
 
 falas['bandeiras'] = {
 	'inicio jogo': '\nBem-vindo(s)!\n',
-	'inicio rodada': 'Vamos começar as apostas!',
-	'adeus': 'Tchau, tchau! Obrigado por jogar.',
-	'jogar novamente': 'Muito bem, então. Vamos jogar!'
+	'inicio rodada': '\nVamos começar as apostas!',
+	'adeus': '\nTchau, tchau! Obrigado por jogar.\n',
+	'jogar novamente': '\nMuito bem, então. Vamos jogar!\n',
+	'ganhador': 'O ganhador da rodada foi o ',
+	'empate': 'A rodada empatou!'
 }
 
 falas['tirar sarro'] = {
@@ -51,14 +55,15 @@ falas['tirar sarro'] = {
 }
 
 falas['pagamento'] = {
-	'perdeu': ', você perdeu',
-	'perdeu tudo': ', seu zé mane! Você perdeu tudo, não pode mais jogar.',
-	'ganhou E': ', que sorte! Você ganhou',
-	'ganhou': ', você ganhou'
+	'perdeu': 'Você perdeu',
+	'perdeu tudo': 'Você perdeu tudo, não pode mais jogar.',
+	'ganhou E': 'Que sorte! Você ganhou',
+	'ganhou': 'Você ganhou',
+	'info': ', você apostou no '
 }
 
 falas['fim de jogo'] = {
-	'pergunta': 'Ninguém tem fichas sobrando. Gostaria(m) de jogar de jogar novamente? (S/N) ',
+	'pergunta': '\nNinguém tem fichas sobrando. Gostaria(m) de jogar de jogar novamente? (S/N) ',
 	'fora da whitelist': 'Não entendi. Responda apenas com "S" ou "N", por favor.'
 }
 

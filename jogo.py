@@ -30,7 +30,13 @@ while PROGRAMA:
 	BARALHO = baralhos(numero_baralhos)
 
 	# pergunta quantas pessoas vão jogar, verificando erros
-	numero_jogadores = solicitar_entrada(falas['numero jogadores'], 'int')
+	numero_jogadores = solicitar_entrada(
+		falas['numero jogadores'],
+		'int', minimo=1,
+		maximo=MAXIMO_JOGADORES,
+		variavel_pergunta=str(MAXIMO_JOGADORES),
+		marcador_variavel=';'
+		)
 
 	# nomeação dos jogadores e atribuição de fichas 
 	FICHAS = dict()	# FICHAS[nome_jogador] = fundos_jogador
@@ -51,7 +57,7 @@ while PROGRAMA:
 		blacklist.append(nome)
 
 		# define quantidade de fichas do jogador
-		FICHAS[nome] = 1000
+		FICHAS[nome] = FICHAS_INICIAIS
 
 	# bandeira de rodada, caso False a rodada termina
 	JOGO = True
@@ -89,10 +95,12 @@ while PROGRAMA:
 			# não pergunta para jogadores sem dinheiro
 			if FICHAS[nome] == 0: continue
 
+			print()	# print de espaçamento
+
 			# pergunta qual é a aposta, verificando erros
 			qual_aposta = solicitar_entrada(
 				falas['qual aposta'], 'str',
-				whitelist=['B', 'J', 'E'],
+				whitelist=POSSIBILIDADES_DE_APOSTA.keys(),
 				variavel_pergunta=nome,
 				marcador_variavel=';'
 				)
@@ -131,88 +139,78 @@ while PROGRAMA:
 		MAO_JOGADOR.append(BOLO.pop())
 		MAO_BANCO.append(BOLO.pop())
 
-		# --- --- PASSO 4, 5, 6 e 7: VERIFICA GANHADORES E DISTRIBUI CARTAS RECORRENTEMENTE --- --- --- --- --- --- --- --- --- --- --- ---
+		# --- --- PASSO 4, 5, 6 e 7: VERIFICA GANHADORES E DISTRIBUI AS TERCEIRAS CARTAS --- --- --- --- --- --- --- --- --- --- --- ---
 
 		# calcula as somas da mão do jogador e do banco
 		SOMA_JOGADOR = soma_cartas(MAO_JOGADOR)
 		SOMA_BANCO = soma_cartas(MAO_BANCO)
 
-		print()
+		print('\n\nRESULTADOS:')
+
+		# mostra as cartas tiradas
 		mostrar_maos(MAO_JOGADOR, MAO_BANCO, SOMA_JOGADOR, SOMA_BANCO)
 
-		# variáveis booleanas, determinam se algum dos dois finalizou, ou seja, somou 8 ou 9
-		jogador_finalizou = SOMA_JOGADOR in [8,9]
-		banco_finalizou = SOMA_BANCO in [8,9]
+		# no caso de nenhum dos dois somar 8 ou 9
+		if not (SOMA_JOGADOR in [8,9] or SOMA_BANCO in [8,9]):
 
-		# bandeiras da condicao de distribuicao da terceira carta
-		sem_finalizadores = not (jogador_finalizou or banco_finalizou)	# True para ninguém com soma 8 ou 9
-		alguem_recebendo = not SOMA_JOGADOR in [6,7] or not SOMA_BANCO in [6,7]	# False para ambos com soma 6 ou 7
-
-		# condicao de distribuicao da terceira carta
-		if sem_finalizadores and alguem_recebendo:
-
-
-			# dá a carta extra ao jogador, caso não tenha somado 6 ou 7
-			if SOMA_JOGADOR not in [6,7]:
-
-				# retira uma carta do bolo e a adiciona à mão do jogador
-				MAO_JOGADOR.append(BOLO.pop())
+			# se o jogador somar menos de 6, dar terceira carta
+			if SOMA_JOGADOR < 6:
+				terceira_carta = BOLO.pop()
+				MAO_JOGADOR.append(terceira_carta)
 				SOMA_JOGADOR = soma_cartas(MAO_JOGADOR)
 
 				mostrar_maos(MAO_JOGADOR, MAO_BANCO, SOMA_JOGADOR, SOMA_BANCO)
 
-				# variável booleana, determina se o jogador somou 8 ou 9
-				jogador_finalizou = SOMA_JOGADOR in [8,9]
+			# determina se o banco recebe a terceira carta
+			if SOMA_BANCO < 6 and SOMA_JOGADOR not in [8,9]:
 
+				# se o jogador não tiver retirado a terceira carta, o banco retira
+				if SOMA_JOGADOR in [6,7]:
 
-			# dá a carta extra ao banco, caso não tenha somado 6 ou 7, e o jogador não tenha finalizado
-			if SOMA_BANCO not in [6,7] and not jogador_finalizou:
+					MAO_BANCO.append(BOLO.pop())
+					SOMA_BANCO = soma_cartas(MAO_BANCO)
 
-				# retira uma carta do bolo e a adiciona à mão do banco
-				MAO_BANCO.append(BOLO.pop())
-				SOMA_BANCO = soma_cartas(MAO_BANCO)
+				# ainda determina se o banco recebe a terceira carta, a partir da regra avançada
+				elif REGRAS_TERCEIRA_CARTA[SOMA_BANCO][terceira_carta[1] % 10] == 1:
+
+					MAO_BANCO.append(BOLO.pop())
+					SOMA_BANCO = soma_cartas(MAO_BANCO)
 
 				mostrar_maos(MAO_JOGADOR, MAO_BANCO, SOMA_JOGADOR, SOMA_BANCO)
 
-				# variável booleana, determina se o banco somou 8 ou 9 
-				banco_finalizou = SOMA_BANCO in [8,9]
 
-		# atualiza as bandeiras da condição conforme os novos valores
-		sem_finalizadores = not (jogador_finalizou or banco_finalizou)
-		alguem_recebendo = not SOMA_JOGADOR in [6,7] or not SOMA_BANCO in [6,7]
+		# verifica quem tem a maior soma e imprime o vencedor
+		if SOMA_BANCO == SOMA_JOGADOR:
+			RESULTADO = 'E'
+			print(falas['bandeiras']['empate'].upper(), end='\n\n')
 
-		# se ambos ficaram presos em 6 ou 7, ou se ambos somaram 8 ou 9
-		if not alguem_recebendo or (jogador_finalizou and banco_finalizou):
+		elif SOMA_BANCO > SOMA_JOGADOR: RESULTADO = 'B'
+		elif SOMA_BANCO < SOMA_JOGADOR: RESULTADO = 'J'
 
-			# verifica quem tem a soma maior
-			if SOMA_JOGADOR == SOMA_BANCO: RESULTADO = 'E'
-			elif SOMA_JOGADOR > SOMA_BANCO: RESULTADO = 'J'
-			elif SOMA_BANCO > SOMA_JOGADOR: RESULTADO = 'B'
-
-		# se somente um dos dois finalizou
-		elif not sem_finalizadores:
-
-			# verifica quem finalizou
-			if jogador_finalizou: RESULTADO = 'J'
-			elif banco_finalizou: RESULTADO = 'B'
+		if RESULTADO != 'E':
+			print(falas['bandeiras']['ganhador'].upper() + POSSIBILIDADES_DE_APOSTA[RESULTADO].upper() + '.', end='\n\n')
 
 		# --- --- --- PAGAMENTO DAS APOSTAS --- --- --- --- --- --- ---
 
 		# loop de pagamento, vai de aposta em aposta
 		for nome in APOSTAS.keys():
 
+			print()	# print de espaçamento
+
 			# variáveis usadas com frequência
 			qual_aposta = APOSTAS[nome][0]
 			quanto_aposta = APOSTAS[nome][1]
+
+			print(nome + ', você apostou ' + str(quanto_aposta) + ' no ' + POSSIBILIDADES_DE_APOSTA[qual_aposta] + '.')
 
 			# se errou a aposta
 			if not qual_aposta == RESULTADO:
 
 				# caso acabou de perder tudo, imprimir fala apropriada
-				if FICHAS[nome] == quanto_aposta: print(nome + falas['pagamento']['perdeu tudo'])
+				if FICHAS[nome] == quanto_aposta: print(falas['pagamento']['perdeu tudo'], end='\n')
 
 				# caso contrário
-				else: print(nome + falas['pagamento']['perdeu'], str(quanto_aposta), end=' fichas.\n')
+				else: print(falas['pagamento']['perdeu'], str(quanto_aposta), end=' fichas.\n')
 
 				# subtrai a perda do total de fichas
 				FICHAS[nome] -= quanto_aposta
@@ -224,10 +222,10 @@ while PROGRAMA:
 			ganho = int(TAXAS[qual_aposta] * quanto_aposta * (1 - COMISSAO[numero_baralhos][qual_aposta]))
 
 			# verifica se ganhou com empate, nesse caso, imprime fala apropriada
-			if RESULTADO == 'E': print(nome + falas['pagamento']['ganhou E'], str(ganho), end=' fichas, com a nossa comissão já inclusa.\n')
+			if RESULTADO == 'E': print(falas['pagamento']['ganhou E'], str(ganho), end=' fichas, com a nossa comissão já inclusa.\n')
 
 			# caso contrário
-			else: print(nome + falas['pagamento']['ganhou'], str(ganho), end=' fichas, considerando a nossa comissão.\n')
+			else: print(falas['pagamento']['ganhou'], str(ganho), end=' fichas, considerando a nossa comissão.\n')
 
 			# adiciona o ganho às fichas
 			FICHAS[nome] += ganho

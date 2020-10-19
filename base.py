@@ -127,7 +127,6 @@ def solicitar_entrada(saidas, tipo_esperado, whitelist=[], blacklist=[], variave
 			continue
 
 		# quebra o loop de verificação
-		print()
 		break
 
 	# retorna a resposta processada
@@ -138,7 +137,7 @@ def mostrar_maos(mao_jogador, mao_banco, soma_jogador, soma_banco):
 	''' imprime a mão do banco e do jogador na
 		tela de forma organizada '''
 
-	print('MÃO DO JOGADOR:\t\tMÃO DO BANCO:')
+	print('\nMÃO DO JOGADOR:\t\tMÃO DO BANCO:')
 
 	i = 0
 	while True:
@@ -146,12 +145,12 @@ def mostrar_maos(mao_jogador, mao_banco, soma_jogador, soma_banco):
 		jogador = True
 		banco = True
 
-		try: print(le_carta(mao_jogador[i]), end='\t\t')
+		try: print('- ' + le_carta(mao_jogador[i]), end='\t\t')
 		except:
 			print(end='\t\t\t')
 			jogador = False
 
-		try: print(le_carta(mao_banco[i]))
+		try: print('- ' + le_carta(mao_banco[i]))
 		except:
 			print()
 			banco = False
